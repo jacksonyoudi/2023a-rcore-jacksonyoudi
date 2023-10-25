@@ -3,8 +3,10 @@
 
 use core::fmt;
 use core::fmt::Write;
+use crate::sbi::shutdown;
 
 mod lang_items;
+mod sbi;
 
 const SYSCALL_EXIT: usize = 93;
 const SYSCALL_WRITE: usize = 64;
@@ -62,5 +64,6 @@ macro_rules! println {
 #[no_mangle]
 extern "C" fn _start() {
     println!("Hello, world!");
-    sys_exit(9);
+    shutdown();
+    // sys_exit(9);
 }
