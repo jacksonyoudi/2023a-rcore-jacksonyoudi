@@ -8,6 +8,8 @@ use crate::sbi::shutdown;
 mod lang_items;
 mod sbi;
 
+core::arch::global_asm!(include_str!("entry.asm"));
+
 const SYSCALL_EXIT: usize = 93;
 const SYSCALL_WRITE: usize = 64;
 
@@ -66,4 +68,21 @@ extern "C" fn _start() {
     println!("Hello, world!");
     shutdown();
     // sys_exit(9);
+}
+
+fn clear_bss() {
+    extern "C" {
+        fn sbss();
+        fn ebss();
+    }
+    (sbss as usize..ebss as usize).for_each(|a| {
+        unsafe { (a as *mut u8).write_volatile(0) }
+    });
+}
+
+
+#[no_mangle]
+pub fn rust_main() -> ! {
+    clear_bss();
+    shutdown();
 }
