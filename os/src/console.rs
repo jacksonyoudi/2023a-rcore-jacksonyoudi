@@ -14,10 +14,11 @@ impl Write for Stdout {
     }
 }
 
-pub fn print(args: Arguments) -> Result {
+pub fn print(args: Arguments) {
     Stdout.write_fmt(args).unwrap();
 }
 
+/// Print! to the host console using the format string and arguments.
 #[macro_export]
 macro_rules! print {
     ($fmt: literal $(, $($arg: tt)+)?) => {
@@ -25,6 +26,8 @@ macro_rules! print {
     }
 }
 
+/// Println! to the host console using the format string and arguments.
+#[macro_export]
 macro_rules! println {
     ($fmt: literal $(, $($arg: tt)+)?) => {
         $crate::console::print(format_args!(concat!($fmt, "\n") $(, $($arg)+)?))
