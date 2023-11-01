@@ -25,6 +25,14 @@ mod sbi;
 // #[path = "boards/qemu.rs"]
 mod board;
 
+mod batch;
+
+mod trap;
+
+mod sync;
+
+mod syscall;
+
 global_asm!(include_str!("entry.asm"));
 
 /// clear BSS segment
@@ -41,15 +49,15 @@ pub fn clear_bss() {
 pub fn rust_main() -> ! {
     extern "C" {
         fn stext(); // begin addr of text segment
-    fn etext(); // end addr of text segment
-    fn srodata(); // start addr of Read-Only data segment
-    fn erodata(); // end addr of Read-Only data ssegment
-    fn sdata(); // start addr of data segment
-    fn edata(); // end addr of data segment
-    fn sbss(); // start addr of BSS segment
-    fn ebss(); // end addr of BSS segment
-    fn boot_stack_lower_bound(); // stack lower bound
-    fn boot_stack_top(); // stack top
+        fn etext(); // end addr of text segment
+        fn srodata(); // start addr of Read-Only data segment
+        fn erodata(); // end addr of Read-Only data ssegment
+        fn sdata(); // start addr of data segment
+        fn edata(); // end addr of data segment
+        fn sbss(); // start addr of BSS segment
+        fn ebss(); // end addr of BSS segment
+        fn boot_stack_lower_bound(); // stack lower bound
+        fn boot_stack_top(); // stack top
     }
     clear_bss();
     logging::init();
