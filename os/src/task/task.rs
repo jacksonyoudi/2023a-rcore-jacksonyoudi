@@ -1,7 +1,5 @@
 //! Types related to task management
 
-use crate::syscall::process::TaskInfo;
-
 use super::TaskContext;
 
 /// The task control block (TCB) of a task.
@@ -11,12 +9,15 @@ pub struct TaskControlBlock {
     pub task_status: TaskStatus,
     /// The task context
     pub task_cx: TaskContext,
-    /// The task info
-    pub task_info: TaskInfo,
+
+    /// The numbers of syscall called by task
+    pub syscall_times: [u32; 5],
+    /// Total running time of task
+    pub start_time: usize,
 }
 
 /// The status of a task
-#[derive(Debug,Copy, Clone, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 pub enum TaskStatus {
     /// uninitialized
     UnInit,
